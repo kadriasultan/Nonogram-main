@@ -70,6 +70,7 @@
             pnlBody.Name = "pnlBody";
             pnlBody.Size = new Size(476, 394);
             pnlBody.TabIndex = 1;
+          
             // 
             // pnlNav
             // 

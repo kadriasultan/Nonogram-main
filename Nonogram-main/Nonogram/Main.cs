@@ -36,13 +36,13 @@ namespace Nonogram
             this.Font = new Font("Segoe UI", 9);
             this.Text = "Nonogram Puzzle";
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.MinimumSize = new Size(400, 400); // Smaller minimum size
-            this.Resize += Main_Resize; // Add resize event handler
+            this.MinimumSize = new Size(400, 400);
+            this.Resize += Main_Resize;
 
             // Navigation panel
             pnlNav.BackColor = PrimaryColor;
-            pnlNav.Padding = new Padding(3); // Reduced padding
-            pnlNav.Height = 40; // Smaller navigation bar
+            pnlNav.Padding = new Padding(3);
+            pnlNav.Height = 40;
 
             // Style navigation buttons
             foreach (Control ctrl in pnlNav.Controls)
@@ -53,54 +53,59 @@ namespace Nonogram
                     btn.FlatStyle = FlatStyle.Flat;
                     btn.FlatAppearance.BorderSize = 0;
                     btn.ForeColor = Color.White;
-                    btn.Font = new Font("Segoe UI", 9, FontStyle.Bold); // Smaller font
-                    btn.Padding = new Padding(8, 3, 8, 3); // Reduced padding
+                    btn.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+                    btn.Padding = new Padding(8, 3, 8, 3);
                     btn.Cursor = Cursors.Hand;
-                    btn.Margin = new Padding(2); // Reduced margin
-                    btn.Height = 30; // Smaller buttons
+                    btn.Margin = new Padding(2);
+                    btn.Height = 30;
+
+                    // Change "Menu" button to "Home"
+                    if (btn.Name == "btnMenu")
+                    {
+                        btn.Text = "HOME";
+                    }
                 }
                 else if (ctrl is Label lbl)
                 {
                     lbl.ForeColor = Color.White;
-                    lbl.Font = new Font("Segoe UI", 9, FontStyle.Bold); // Smaller font
+                    lbl.Font = new Font("Segoe UI", 9, FontStyle.Bold);
                 }
             }
 
             // Body panel
             pnlBody.BackColor = LightBackground;
-            pnlBody.Padding = new Padding(10); // Reduced padding
+            pnlBody.Padding = new Padding(10);
         }
 
         private void InitializeWelcomeSection()
         {
-            // Welcome label - smaller and more compact
+            // Welcome label
             lblWelcome = new Label
             {
                 Text = "WELKOM BIJ NONOGRAM",
-                Font = new Font("Segoe UI", 14, FontStyle.Bold), // Smaller font
+                Font = new Font("Segoe UI", 14, FontStyle.Bold),
                 ForeColor = PrimaryColor,
                 Dock = DockStyle.Top,
-                Height = 40, // Smaller height
+                Height = 40,
                 TextAlign = ContentAlignment.MiddleCenter,
                 Name = "lblWelcome",
                 BackColor = Color.Transparent,
-                Margin = new Padding(0, 0, 0, 10) // Reduced margin
+                Margin = new Padding(0, 0, 0, 10)
             };
 
-            // Logo/image - size will be adjusted dynamically
+            // Logo/image
             logoPictureBox = new PictureBox
             {
                 SizeMode = PictureBoxSizeMode.Zoom,
                 Dock = DockStyle.Top,
                 Name = "logoPictureBox",
-                Height = CalculateLogoHeight(), // Initial height based on form size
-                Margin = new Padding(0, 0, 0, 10), // Reduced margin
+                Height = CalculateLogoHeight(),
+                Margin = new Padding(0, 50, 0, 0),
                 BackColor = Color.Transparent
             };
 
             try
             {
-                // Load image from resources
                 if (Properties.Resources.nono != null)
                 {
                     using (var ms = new MemoryStream(Properties.Resources.nono))
@@ -114,25 +119,40 @@ namespace Nonogram
                 MessageBox.Show($"Error loading image: {ex.Message}");
             }
 
-            // Add controls to panel (logo first, then label)
+            // Add controls to panel
             pnlBody.Controls.Add(logoPictureBox);
             pnlBody.Controls.Add(lblWelcome);
         }
 
         private int CalculateLogoHeight()
         {
-            // Calculate logo height based on form height
-            int baseHeight = 80; // Default height for small screens
+            int baseHeight = 80;
             int formHeight = this.ClientSize.Height;
 
-            if (formHeight > 800)
-                return 200; // Large screens
-            else if (formHeight > 600)
-                return 150; // Medium-large screens
-            else if (formHeight > 400)
-                return 100; // Medium screens
-            else
-                return baseHeight; // Small screens
+            if (formHeight > 800) return 200;
+            else if (formHeight > 600) return 150;
+            else if (formHeight > 400) return 100;
+            else return baseHeight;
+        }
+
+        private int CalculateButtonHeight()
+        {
+            int formHeight = this.ClientSize.Height;
+
+            if (formHeight > 800) return 50;
+            else if (formHeight > 600) return 45;
+            else if (formHeight > 400) return 40;
+            else return 35;
+        }
+
+        private float CalculateButtonFontSize()
+        {
+            int formHeight = this.ClientSize.Height;
+
+            if (formHeight > 800) return 10.0f;
+            else if (formHeight > 600) return 9.5f;
+            else if (formHeight > 400) return 9.0f;
+            else return 8.5f;
         }
 
         public static void ChangeView(string control, Control.ControlCollection controls)
@@ -140,7 +160,6 @@ namespace Nonogram
             var bodyPanel = controls.Find("pnlBody", false).FirstOrDefault();
             if (bodyPanel == null) return;
 
-            // Show/hide welcome section only for menu
             bool showWelcome = (control == "menu");
             var welcomeLabel = bodyPanel.Controls.Find("lblWelcome", false).FirstOrDefault();
             var logo = bodyPanel.Controls.Find("logoPictureBox", false).FirstOrDefault();
@@ -148,7 +167,6 @@ namespace Nonogram
             if (welcomeLabel != null) welcomeLabel.Visible = showWelcome;
             if (logo != null) logo.Visible = showWelcome;
 
-            // Show/hide views
             foreach (Control ctrl in bodyPanel.Controls)
             {
                 if (ctrl is UserControl view)
@@ -199,7 +217,6 @@ namespace Nonogram
             menu.Name = "menu";
             menu.Visible = false;
 
-            // Style menu buttons - smaller for small screens
             foreach (Control ctrl in menu.Controls)
             {
                 if (ctrl is Button btn)
@@ -209,10 +226,10 @@ namespace Nonogram
                     btn.FlatAppearance.BorderColor = SecondaryColor;
                     btn.FlatAppearance.BorderSize = 1;
                     btn.ForeColor = DarkText;
-                    btn.Font = new Font("Segoe UI", 10, FontStyle.Bold); // Smaller font
-                    btn.Padding = new Padding(10, 5, 10, 5); // Reduced padding
-                    btn.Height = 40; // Smaller height
-                    btn.Margin = new Padding(0, 5, 0, 5); // Reduced margin
+                    btn.Font = new Font("Segoe UI", CalculateButtonFontSize(), FontStyle.Bold);
+                    btn.Padding = new Padding(10, 5, 10, 5);
+                    btn.Height = CalculateButtonHeight();
+                    btn.Margin = new Padding(0, 5, 0, 5);
                     btn.Cursor = Cursors.Hand;
                 }
             }
@@ -273,11 +290,23 @@ namespace Nonogram
 
         private void Main_Resize(object sender, EventArgs e)
         {
-            // Update logo size when form is resized
             var logo = pnlBody.Controls.Find("logoPictureBox", false).FirstOrDefault();
             if (logo != null)
             {
                 logo.Height = CalculateLogoHeight();
+            }
+
+            var menuControl = pnlBody.Controls.Find("menu", false).FirstOrDefault() as MenuControl;
+            if (menuControl != null && menuControl.Visible)
+            {
+                foreach (Control ctrl in menuControl.Controls)
+                {
+                    if (ctrl is Button btn)
+                    {
+                        btn.Height = CalculateButtonHeight();
+                        btn.Font = new Font("Segoe UI", CalculateButtonFontSize(), FontStyle.Bold);
+                    }
+                }
             }
         }
         #endregion
