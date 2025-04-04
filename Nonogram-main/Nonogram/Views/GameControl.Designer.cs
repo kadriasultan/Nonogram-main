@@ -1,4 +1,5 @@
-﻿namespace Nonogram.Views
+﻿
+namespace Nonogram.Views
 {
     partial class GameControl
     {
@@ -46,12 +47,12 @@
             pnlGameBtns.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             pnlGameBtns.Controls.Add(pnlSizeChange, 0, 0);
             pnlGameBtns.Dock = DockStyle.Bottom;
-            pnlGameBtns.Location = new Point(0, 400);
+            pnlGameBtns.Location = new Point(0, 250);
             pnlGameBtns.Margin = new Padding(0);
             pnlGameBtns.Name = "pnlGameBtns";
             pnlGameBtns.RowCount = 1;
             pnlGameBtns.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            pnlGameBtns.Size = new Size(500, 100);
+            pnlGameBtns.Size = new Size(308, 62);
             pnlGameBtns.TabIndex = 0;
             // 
             // pnlSizeChange
@@ -59,58 +60,60 @@
             pnlSizeChange.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             pnlSizeChange.ColumnCount = 4;
             pnlSizeChange.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            pnlSizeChange.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
-            pnlSizeChange.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
+            pnlSizeChange.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 74F));
+            pnlSizeChange.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 74F));
             pnlSizeChange.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             pnlSizeChange.Controls.Add(inGridSize, 1, 1);
             pnlSizeChange.Controls.Add(btnSubmitSize, 2, 1);
             pnlSizeChange.Controls.Add(lblChange, 1, 0);
-            pnlSizeChange.Location = new Point(0, 3);
+            pnlSizeChange.Location = new Point(0, 1);
             pnlSizeChange.Margin = new Padding(0);
             pnlSizeChange.Name = "pnlSizeChange";
             pnlSizeChange.RowCount = 2;
-            pnlSizeChange.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            pnlSizeChange.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
             pnlSizeChange.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            pnlSizeChange.Size = new Size(250, 94);
+            pnlSizeChange.Size = new Size(154, 59);
             pnlSizeChange.TabIndex = 1;
             // 
             // inGridSize
             // 
-            inGridSize.Anchor = AnchorStyles.None;
+            inGridSize.Anchor = AnchorStyles.Bottom;
             inGridSize.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            inGridSize.Location = new Point(15, 45);
+            inGridSize.Location = new Point(9, 29);
             inGridSize.Margin = new Padding(0);
             inGridSize.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
             inGridSize.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
             inGridSize.Name = "inGridSize";
-            inGridSize.Size = new Size(100, 43);
+            inGridSize.Size = new Size(62, 30);
             inGridSize.TabIndex = 0;
             inGridSize.Value = new decimal(new int[] { 5, 0, 0, 0 });
             inGridSize.KeyPress += inGridSize_KeyPress;
             // 
             // btnSubmitSize
             // 
-            btnSubmitSize.Anchor = AnchorStyles.None;
-            btnSubmitSize.Location = new Point(127, 42);
+            btnSubmitSize.Anchor = AnchorStyles.Bottom;
+            btnSubmitSize.Location = new Point(78, 28);
             btnSubmitSize.Margin = new Padding(0);
             btnSubmitSize.Name = "btnSubmitSize";
-            btnSubmitSize.Size = new Size(116, 50);
+            btnSubmitSize.Size = new Size(71, 31);
             btnSubmitSize.TabIndex = 1;
-            btnSubmitSize.Text = "Change";
+            btnSubmitSize.Text = "Speel nu";
             btnSubmitSize.UseVisualStyleBackColor = true;
             btnSubmitSize.Click += btnSubmitSize_Click;
             // 
             // lblChange
             // 
+            lblChange.Anchor = AnchorStyles.Bottom;
             lblChange.AutoSize = true;
             pnlSizeChange.SetColumnSpan(lblChange, 2);
-            lblChange.Dock = DockStyle.Fill;
-            lblChange.Location = new Point(8, 0);
+            lblChange.Location = new Point(30, 5);
+            lblChange.Margin = new Padding(2, 0, 2, 0);
             lblChange.Name = "lblChange";
-            lblChange.Size = new Size(234, 40);
+            lblChange.Size = new Size(94, 20);
             lblChange.TabIndex = 2;
-            lblChange.Text = "Change Size";
+            lblChange.Text = "kees de level";
             lblChange.TextAlign = ContentAlignment.MiddleCenter;
+            lblChange.Click += lblChange_Click;
             // 
             // pnlGame
             // 
@@ -118,23 +121,29 @@
             pnlGame.Location = new Point(0, 0);
             pnlGame.Margin = new Padding(0);
             pnlGame.Name = "pnlGame";
-            pnlGame.Size = new Size(500, 400);
+            pnlGame.Size = new Size(308, 250);
             pnlGame.TabIndex = 1;
+            pnlGame.Paint += pnlGame_Paint_1;
             // 
             // GameControl
             // 
-            AutoScaleDimensions = new SizeF(13F, 32F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(pnlGame);
             Controls.Add(pnlGameBtns);
             Margin = new Padding(0);
             Name = "GameControl";
-            Size = new Size(500, 500);
+            Size = new Size(308, 312);
             pnlGameBtns.ResumeLayout(false);
             pnlSizeChange.ResumeLayout(false);
             pnlSizeChange.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)inGridSize).EndInit();
             ResumeLayout(false);
+        }
+
+        private void lblChange_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

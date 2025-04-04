@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -76,7 +75,7 @@ namespace Nonogram.Views
             Rectangle area = new Rectangle(_game.GridStart.X, _game.GridStart.Y, _game.GridArea, _game.GridArea);
 
             g.FillRectangle(Brushes.White, area);
-            
+
             for (int i = 0; i < _game.GridSize; i++)
             {
                 g.DrawLine(Pens.Black, _game.GridStart.X, _game.GridStart.Y + i * _game.CellSize, _game.GridStart.X + _game.GridArea, _game.GridStart.Y + i * _game.CellSize);
@@ -127,6 +126,11 @@ namespace Nonogram.Views
         {
             ChangeGrid((int)inGridSize.Value);
             pnlGame.Refresh();
+        }
+
+        private void pnlGame_Paint_1(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
