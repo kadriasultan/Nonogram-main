@@ -1,150 +1,285 @@
 using Nonogram.Views;
 using Nonogram.Models;
+using System.Drawing;
+using System.Windows.Forms;
+using System.IO;
 
 namespace Nonogram
 {
     public partial class Main : Form
     {
+        // Professional color palette
+        private readonly Color PrimaryColor = Color.FromArgb(44, 62, 80);
+        private readonly Color SecondaryColor = Color.FromArgb(52, 152, 219);
+        private readonly Color LightBackground = Color.FromArgb(236, 240, 241);
+        private readonly Color DarkText = Color.FromArgb(44, 62, 80);
+
         public static User? User = null;
+        private Label lblWelcome;
+        private PictureBox logoPictureBox;
+
         public Main()
         {
             InitializeComponent();
+            ApplyProfessionalStyling();
+            InitializeWelcomeSection();
             InitializeView();
 
-            Main.ChangeNavUser(Controls);
-            Main.ChangeView("menu", Controls);
+            ChangeNavUser(Controls);
+            ChangeView("menu", Controls);
         }
 
-        public static void ChangeView(string control, Control.ControlCollection Controls)
+        private void ApplyProfessionalStyling()
         {
-            Control? collectionControl = Controls.Find("pnlBody", false).FirstOrDefault();
+            // Main form styling
+            this.BackColor = LightBackground;
+            this.Font = new Font("Segoe UI", 9);
+            this.Text = "Nonogram Puzzle";
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.MinimumSize = new Size(400, 400); // Smaller minimum size
+            this.Resize += Main_Resize; // Add resize event handler
 
-            if (collectionControl == null) return;
+            // Navigation panel
+            pnlNav.BackColor = PrimaryColor;
+            pnlNav.Padding = new Padding(3); // Reduced padding
+            pnlNav.Height = 40; // Smaller navigation bar
 
-            for (int i = 0; i < collectionControl.Controls.Count; i++)
+            // Style navigation buttons
+            foreach (Control ctrl in pnlNav.Controls)
             {
-                if (collectionControl.Controls[i].Name == control) collectionControl.Controls[i].Visible = true;
-                else collectionControl.Controls[i].Visible = false;
-            }
-        }
-
-        public static void ChangeNavUser(Control.ControlCollection Controls)
-        {
-            Control? collectionControl = Controls.Find("pnlNav", false).FirstOrDefault();
-            if (collectionControl == null) return;
-
-            if (Main.User == null)
-            {
-                for (int i = 0; i < collectionControl.Controls.Count; i++)
+                if (ctrl is Button btn)
                 {
-                    Control control = collectionControl.Controls[i];
-                    if (control.Name == "lblUser") control.Visible = false;
-                    else if (control.Name == "btnUser")
+                    btn.BackColor = SecondaryColor;
+                    btn.FlatStyle = FlatStyle.Flat;
+                    btn.FlatAppearance.BorderSize = 0;
+                    btn.ForeColor = Color.White;
+                    btn.Font = new Font("Segoe UI", 9, FontStyle.Bold); // Smaller font
+                    btn.Padding = new Padding(8, 3, 8, 3); // Reduced padding
+                    btn.Cursor = Cursors.Hand;
+                    btn.Margin = new Padding(2); // Reduced margin
+                    btn.Height = 30; // Smaller buttons
+                }
+                else if (ctrl is Label lbl)
+                {
+                    lbl.ForeColor = Color.White;
+                    lbl.Font = new Font("Segoe UI", 9, FontStyle.Bold); // Smaller font
+                }
+            }
+
+            // Body panel
+            pnlBody.BackColor = LightBackground;
+            pnlBody.Padding = new Padding(10); // Reduced padding
+        }
+
+        private void InitializeWelcomeSection()
+        {
+            // Welcome label - smaller and more compact
+            lblWelcome = new Label
+            {
+                Text = "WELKOM BIJ NONOGRAM",
+                Font = new Font("Segoe UI", 14, FontStyle.Bold), // Smaller font
+                ForeColor = PrimaryColor,
+                Dock = DockStyle.Top,
+                Height = 40, // Smaller height
+                TextAlign = ContentAlignment.MiddleCenter,
+                Name = "lblWelcome",
+                BackColor = Color.Transparent,
+                Margin = new Padding(0, 0, 0, 10) // Reduced margin
+            };
+
+            // Logo/image - size will be adjusted dynamically
+            logoPictureBox = new PictureBox
+            {
+                SizeMode = PictureBoxSizeMode.Zoom,
+                Dock = DockStyle.Top,
+                Name = "logoPictureBox",
+                Height = CalculateLogoHeight(), // Initial height based on form size
+                Margin = new Padding(0, 0, 0, 10), // Reduced margin
+                BackColor = Color.Transparent
+            };
+
+            try
+            {
+                // Load image from resources
+                if (Properties.Resources.nono != null)
+                {
+                    using (var ms = new MemoryStream(Properties.Resources.nono))
                     {
-                        control.Text = "login";
-                        control.Tag = "login";
+                        logoPictureBox.Image = Image.FromStream(ms);
                     }
                 }
-                return;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading image: {ex.Message}");
             }
 
-            for (int i = 0; i < collectionControl.Controls.Count; i++)
+            // Add controls to panel (logo first, then label)
+            pnlBody.Controls.Add(logoPictureBox);
+            pnlBody.Controls.Add(lblWelcome);
+        }
+
+        private int CalculateLogoHeight()
+        {
+            // Calculate logo height based on form height
+            int baseHeight = 80; // Default height for small screens
+            int formHeight = this.ClientSize.Height;
+
+            if (formHeight > 800)
+                return 200; // Large screens
+            else if (formHeight > 600)
+                return 150; // Medium-large screens
+            else if (formHeight > 400)
+                return 100; // Medium screens
+            else
+                return baseHeight; // Small screens
+        }
+
+        public static void ChangeView(string control, Control.ControlCollection controls)
+        {
+            var bodyPanel = controls.Find("pnlBody", false).FirstOrDefault();
+            if (bodyPanel == null) return;
+
+            // Show/hide welcome section only for menu
+            bool showWelcome = (control == "menu");
+            var welcomeLabel = bodyPanel.Controls.Find("lblWelcome", false).FirstOrDefault();
+            var logo = bodyPanel.Controls.Find("logoPictureBox", false).FirstOrDefault();
+
+            if (welcomeLabel != null) welcomeLabel.Visible = showWelcome;
+            if (logo != null) logo.Visible = showWelcome;
+
+            // Show/hide views
+            foreach (Control ctrl in bodyPanel.Controls)
             {
-                Control control = collectionControl.Controls[i];
-                if (control.Name == "lblUser")
+                if (ctrl is UserControl view)
                 {
-                    control.Visible = true;
-                    control.Text = Main.User.Name;
-                }
-                else if (control.Name == "btnUser")
-                {
-                    control.Text = "logout";
-                    control.Tag = "logout";
+                    view.Visible = (view.Name == control);
                 }
             }
         }
 
-        #region Views code
+        public static void ChangeNavUser(Control.ControlCollection controls)
+        {
+            var navPanel = controls.Find("pnlNav", false).FirstOrDefault();
+            if (navPanel == null) return;
+
+            foreach (Control ctrl in navPanel.Controls)
+            {
+                if (ctrl.Name == "lblUser")
+                {
+                    ctrl.Visible = (User != null);
+                    if (User != null) ctrl.Text = User.Name.ToUpper();
+                }
+                else if (ctrl.Name == "btnUser")
+                {
+                    ctrl.Text = (User == null) ? "LOGIN" : "LOGOUT";
+                    ctrl.Tag = (User == null) ? "login" : "logout";
+                }
+            }
+        }
+
+        #region Views Initialization
         private void InitializeView()
         {
-            menu = new MenuControl();
-            login = new LoginControl();
-            register = new RegisterControl();
-            game = new GameControl();
-            SuspendLayout();
-            ///
-            /// menu
-            /// 
-            menu.Dock = DockStyle.Fill;
-            menu.Location = new Point(0, 0);
-            menu.Margin = new Padding(0);
-            menu.Name = "menu";
-            menu.TabIndex = 0;
-            menu.Visible = false;
-            ///
-            /// login
-            ///
-            login.Dock = DockStyle.Fill;
-            login.Location = new Point(0, 0);
-            login.Margin = new Padding(0);
-            login.Name = "login";
-            login.TabIndex = 0;
-            login.Visible = false;
-            ///
-            /// Register
-            ///
-            register.Dock = DockStyle.Fill;
-            register.Location = new Point(0, 0);
-            register.Margin = new Padding(0);
-            register.Name = "register";
-            register.TabIndex = 0;
-            register.Visible = false;
-            ///
-            /// Game
-            /// 
-            game.Dock = DockStyle.Fill;
-            game.Location = new Point(0, 0);
-            game.Margin = new Padding(0);
-            game.Name = "game";
-            game.TabIndex = 0;
-            game.Visible = false;
-            ///
-            /// Main
-            ///
+            InitializeMenuControl();
+            InitializeLoginControl();
+            InitializeRegisterControl();
+            InitializeGameControl();
+
             pnlBody.Controls.Add(menu);
             pnlBody.Controls.Add(login);
             pnlBody.Controls.Add(register);
             pnlBody.Controls.Add(game);
-            ResumeLayout(false);
         }
 
-        MenuControl menu;
-        LoginControl login;
-        RegisterControl register;
-        GameControl game;
+        private void InitializeMenuControl()
+        {
+            menu = new MenuControl();
+            menu.Dock = DockStyle.Fill;
+            menu.Name = "menu";
+            menu.Visible = false;
+
+            // Style menu buttons - smaller for small screens
+            foreach (Control ctrl in menu.Controls)
+            {
+                if (ctrl is Button btn)
+                {
+                    btn.BackColor = Color.White;
+                    btn.FlatStyle = FlatStyle.Flat;
+                    btn.FlatAppearance.BorderColor = SecondaryColor;
+                    btn.FlatAppearance.BorderSize = 1;
+                    btn.ForeColor = DarkText;
+                    btn.Font = new Font("Segoe UI", 10, FontStyle.Bold); // Smaller font
+                    btn.Padding = new Padding(10, 5, 10, 5); // Reduced padding
+                    btn.Height = 40; // Smaller height
+                    btn.Margin = new Padding(0, 5, 0, 5); // Reduced margin
+                    btn.Cursor = Cursors.Hand;
+                }
+            }
+        }
+
+        private void InitializeLoginControl()
+        {
+            login = new LoginControl();
+            login.Dock = DockStyle.Fill;
+            login.Name = "login";
+            login.Visible = false;
+        }
+
+        private void InitializeRegisterControl()
+        {
+            register = new RegisterControl();
+            register.Dock = DockStyle.Fill;
+            register.Name = "register";
+            register.Visible = false;
+        }
+
+        private void InitializeGameControl()
+        {
+            game = new GameControl();
+            game.Dock = DockStyle.Fill;
+            game.Name = "game";
+            game.Visible = false;
+        }
+
+        private MenuControl menu;
+        private LoginControl login;
+        private RegisterControl register;
+        private GameControl game;
         #endregion
 
+        #region Event Handlers
         private void NavButton_Menu(object sender, EventArgs e)
         {
-            Main.ChangeView("menu", Controls);
+            ChangeView("menu", Controls);
         }
 
         private void NavButton_User(object sender, EventArgs e)
         {
-            Button btn = (Button)sender;
-
-            if (btn.Tag == "logout")
+            if (sender is Button btn)
             {
-                Main.User = null;
-                ChangeNavUser(Controls);
+                if (btn.Tag?.ToString() == "logout")
+                {
+                    User = null;
+                    ChangeNavUser(Controls);
+                    ChangeView("menu", Controls);
+                }
+                else
+                {
+                    ChangeView("login", Controls);
+                }
             }
-            else if (btn.Tag == "login")
-                Main.ChangeView("login", Controls);
         }
 
         private void Main_Resize(object sender, EventArgs e)
         {
-            Update();
+            // Update logo size when form is resized
+            var logo = pnlBody.Controls.Find("logoPictureBox", false).FirstOrDefault();
+            if (logo != null)
+            {
+                logo.Height = CalculateLogoHeight();
+            }
         }
+        #endregion
     }
 }
