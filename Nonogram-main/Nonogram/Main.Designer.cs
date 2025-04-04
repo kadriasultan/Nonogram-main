@@ -2,43 +2,6 @@
 {
     partial class Main
     {
-        private PictureBox picLogo;
-
-        private void InitializeComponent()
-        {
-            btnUser = new Button();
-            btnMenu = new Button();
-            pnlBody = new Panel();
-            pnlNav = new TableLayoutPanel();
-            lblUser = new Label();
-            pnlNav.SuspendLayout();
-            SuspendLayout();
-
-            // Voeg de PictureBox toe
-            picLogo = new PictureBox(); // Maak een nieuwe PictureBox
-            picLogo.Location = new Point(300, 100); // Zet de locatie van de afbeelding
-            picLogo.Size = new Size(200, 200); // Stel de grootte in van de afbeelding
-            picLogo.SizeMode = PictureBoxSizeMode.Zoom; // Zorg ervoor dat de afbeelding proportioneel schaalt
-
-            // Voeg de PictureBox toe aan pnlBody
-            pnlBody.Controls.Add(picLogo);
-
-            // Laad de afbeelding vanaf een lokaal bestand
-            string imagePath = @"C:\Users\kadri\Desktop\Nonogram-main\nonogram-puzzles-featured-image.jpg; // Pad naar je lokale afbeelding
-
-            try
-            {
-                picLogo.Image = Image.FromFile(imagePath); // Laad de afbeelding van het bestand
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Er is een fout opgetreden bij het laden van de afbeelding: " + ex.Message);
-            }
-
-            // Rest van je code...
-            // Hier wordt je originele code verder uitgevoerd (zoals knoppen en panels instellen)
-        }
-
         /// <summary>
         ///  Required designer variable.
         /// </summary>
@@ -70,20 +33,87 @@
             pnlBody = new Panel();
             pnlNav = new TableLayoutPanel();
             lblUser = new Label();
-
             pnlNav.SuspendLayout();
             SuspendLayout();
-
-            // Code voor knoppen en andere UI-elementen blijft hetzelfde
-            // Voorbeeld voor de btnUser en btnMenu zoals je ze al hebt.
-
-            // Verander de achtergrond van de panel en knoppen
-            pnlBody.BackColor = Color.FromArgb(255, 159, 0); // Oranjekleur voor de achtergrond
-            pnlNav.BackColor = Color.FromArgb(255, 69, 0);  // Donkeroranje voor de navigatiebalk
-
-            // Voeg de PictureBox opnieuw toe in de pnlBody
-
-            // Voeg je knoppen en labels toe zoals je dat eerder hebt gedaan
+            // 
+            // btnUser
+            // 
+            btnUser.Anchor = AnchorStyles.None;
+            btnUser.Font = new Font("Segoe UI", 10.875F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnUser.Location = new Point(599, 25);
+            btnUser.Margin = new Padding(0);
+            btnUser.Name = "btnUser";
+            btnUser.Size = new Size(150, 50);
+            btnUser.TabIndex = 1;
+            btnUser.Tag = "login";
+            btnUser.Text = "User";
+            btnUser.UseVisualStyleBackColor = true;
+            btnUser.Click += NavButton_User;
+            // 
+            // btnMenu
+            // 
+            btnMenu.Anchor = AnchorStyles.None;
+            btnMenu.Font = new Font("Segoe UI", 10.875F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnMenu.Location = new Point(25, 25);
+            btnMenu.Margin = new Padding(0);
+            btnMenu.Name = "btnMenu";
+            btnMenu.Size = new Size(150, 50);
+            btnMenu.TabIndex = 0;
+            btnMenu.Text = "Menu";
+            btnMenu.UseVisualStyleBackColor = true;
+            btnMenu.Click += NavButton_Menu;
+            // 
+            // pnlBody
+            // 
+            pnlBody.Dock = DockStyle.Fill;
+            pnlBody.Location = new Point(0, 100);
+            pnlBody.Margin = new Padding(0);
+            pnlBody.Name = "pnlBody";
+            pnlBody.Size = new Size(774, 629);
+            pnlBody.TabIndex = 1;
+            // 
+            // pnlNav
+            // 
+            pnlNav.ColumnCount = 3;
+            pnlNav.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200F));
+            pnlNav.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            pnlNav.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200F));
+            pnlNav.Controls.Add(btnMenu, 0, 0);
+            pnlNav.Controls.Add(btnUser, 2, 0);
+            pnlNav.Controls.Add(lblUser, 1, 0);
+            pnlNav.Dock = DockStyle.Top;
+            pnlNav.Location = new Point(0, 0);
+            pnlNav.Margin = new Padding(0);
+            pnlNav.Name = "pnlNav";
+            pnlNav.RowCount = 1;
+            pnlNav.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            pnlNav.Size = new Size(774, 100);
+            pnlNav.TabIndex = 2;
+            // 
+            // lblUser
+            // 
+            lblUser.Anchor = AnchorStyles.Right;
+            lblUser.AutoSize = true;
+            lblUser.Font = new Font("Segoe UI Semibold", 13.875F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblUser.Location = new Point(454, 25);
+            lblUser.Margin = new Padding(0);
+            lblUser.Name = "lblUser";
+            lblUser.Size = new Size(120, 50);
+            lblUser.TabIndex = 2;
+            lblUser.Text = "label1";
+            // 
+            // Main
+            // 
+            AutoScaleDimensions = new SizeF(13F, 32F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(774, 729);
+            Controls.Add(pnlBody);
+            Controls.Add(pnlNav);
+            Name = "Main";
+            Text = "Nonogram Game";
+            pnlNav.ResumeLayout(false);
+            pnlNav.PerformLayout();
+            ResumeLayout(false);
         }
 
         #endregion
@@ -92,21 +122,5 @@
         private Button btnMenu;
         private TableLayoutPanel pnlNav;
         private Label lblUser;
-
-        private void Button_MouseEnter(object sender, EventArgs e)
-        {
-            Button btn = (Button)sender;
-            btn.BackColor = Color.FromArgb(255, 140, 0); // Orange Red bij hover
-            btn.ForeColor = Color.White; // Witte tekstkleur bij hover
-        }
-
-        private void Button_MouseLeave(object sender, EventArgs e)
-        {
-            Button btn = (Button)sender;
-            btn.BackColor = Color.FromArgb(255, 165, 0); // Terug naar originele oranje
-            btn.ForeColor = Color.White; // Terug naar originele witte tekstkleur
-        }
-
     }
-
 }

@@ -1,130 +1,149 @@
-﻿public partial class GameControl : UserControl
+﻿namespace Nonogram.Views
 {
-    private Game _game;
-    private bool _isPaused = false;
-    FontFamily fontFamily = new("Arial");
-    Font font;
-
-    public GameControl()
+    partial class GameControl
     {
-        InitializeComponent();
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-        DoubleBuffered = true;
-        pnlGame.Paint += PnlGame_Paint;
-        pnlGame.MouseClick += PnlGame_MouseClick;
-        pnlGame.Resize += PnlGame_Resize;
-
-        // Voeg pauze-knop en score label toe
-        btnPause.Click += BtnPause_Click;
-        lblScore.Text = "Score: 0";
-    }
-
-    private void BtnPause_Click(object sender, EventArgs e)
-    {
-        _isPaused = !_isPaused;
-        if (_isPaused)
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
         {
-            MessageBox.Show("Game Paused");
-        }
-        else
-        {
-            MessageBox.Show("Game Resumed");
-        }
-        pnlGame.Invalidate();  // Refresh the game area
-    }
-
-    private void PnlGame_Paint(object sender, PaintEventArgs e)
-    {
-        if (_game == null || _isPaused) return;
-
-        _game.ValidateGame();
-
-        if (_game.Complete) MessageBox.Show("Game is complete");
-
-        Graphics g = e.Graphics;
-
-        _game.CellSize = Math.Min(pnlGame.ClientSize.Width, pnlGame.ClientSize.Height) / (_game.GridSize + Math.Max(_game.RowHintMax, _game.ColHintMax));
-        _game.GridStart = new Point(_game.CellSize * _game.RowHintMax, _game.CellSize * _game.ColHintMax);
-        _game.GridArea = _game.CellSize * _game.GridSize;
-
-        font = new Font(fontFamily, _game.CellSize, FontStyle.Regular, GraphicsUnit.Pixel);
-
-        Rectangle area = new Rectangle(_game.GridStart.X, _game.GridStart.Y, _game.GridArea, _game.GridArea);
-
-        g.FillRectangle(Brushes.White, area);
-
-        // Tekenen van het raster
-        for (int i = 0; i < _game.GridSize; i++)
-        {
-            g.DrawLine(Pens.Black, _game.GridStart.X, _game.GridStart.Y + i * _game.CellSize, _game.GridStart.X + _game.GridArea, _game.GridStart.Y + i * _game.CellSize);
-            g.DrawLine(Pens.Black, _game.GridStart.X + i * _game.CellSize, _game.GridStart.Y, _game.GridStart.X + i * _game.CellSize, _game.GridStart.Y + _game.GridArea);
-        }
-        g.DrawRectangle(Pens.Black, area);
-
-        // Score berekening
-        int correctCells = 0;
-        for (int row = 0; row < _game.Marked.GetLength(0); row++)
-        {
-            for (int col = 0; col < _game.Marked.GetLength(1); col++)
+            if (disposing && (components != null))
             {
-                if (_game.Marked[row, col] == Marked.Done)
-                {
-                    correctCells++;
-                }
+                components.Dispose();
             }
+            base.Dispose(disposing);
         }
-        lblScore.Text = $"Score: {correctCells}";  // Update score
 
-        // Markeren van de cellen
-        for (int row = 0; row < _game.Marked.GetLength(0); row++)
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
         {
-            for (int col = 0; col < _game.Marked.GetLength(1); col++)
-            {
-                if (_game.Marked[row, col] == Marked.Done)
-                {
-                    g.FillRectangle(Brushes.Black, _game.GridStart.X + (col * _game.CellSize + _game.CellPadding.Left), _game.GridStart.Y + (row * _game.CellSize + _game.CellPadding.Top), _game.CellSize - _game.CellPadding.Left - _game.CellPadding.Right, _game.CellSize - _game.CellPadding.Bottom - _game.CellPadding.Top);
-                }
-                else if (_game.Marked[row, col] == Marked.Wrong)
-                {
-                    g.DrawString("X", font, Brushes.DarkRed, new Rectangle(_game.GridStart.X + (col * _game.CellSize), _game.GridStart.Y + (row * _game.CellSize), _game.CellSize, _game.CellSize));
-                }
-            }
+            pnlGameBtns = new TableLayoutPanel();
+            pnlSizeChange = new TableLayoutPanel();
+            inGridSize = new NumericUpDown();
+            btnSubmitSize = new Button();
+            lblChange = new Label();
+            pnlGame = new Panel();
+            pnlGameBtns.SuspendLayout();
+            pnlSizeChange.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)inGridSize).BeginInit();
+            SuspendLayout();
+            // 
+            // pnlGameBtns
+            // 
+            pnlGameBtns.ColumnCount = 2;
+            pnlGameBtns.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            pnlGameBtns.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            pnlGameBtns.Controls.Add(pnlSizeChange, 0, 0);
+            pnlGameBtns.Dock = DockStyle.Bottom;
+            pnlGameBtns.Location = new Point(0, 400);
+            pnlGameBtns.Margin = new Padding(0);
+            pnlGameBtns.Name = "pnlGameBtns";
+            pnlGameBtns.RowCount = 1;
+            pnlGameBtns.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            pnlGameBtns.Size = new Size(500, 100);
+            pnlGameBtns.TabIndex = 0;
+            // 
+            // pnlSizeChange
+            // 
+            pnlSizeChange.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            pnlSizeChange.ColumnCount = 4;
+            pnlSizeChange.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            pnlSizeChange.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
+            pnlSizeChange.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
+            pnlSizeChange.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            pnlSizeChange.Controls.Add(inGridSize, 1, 1);
+            pnlSizeChange.Controls.Add(btnSubmitSize, 2, 1);
+            pnlSizeChange.Controls.Add(lblChange, 1, 0);
+            pnlSizeChange.Location = new Point(0, 3);
+            pnlSizeChange.Margin = new Padding(0);
+            pnlSizeChange.Name = "pnlSizeChange";
+            pnlSizeChange.RowCount = 2;
+            pnlSizeChange.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            pnlSizeChange.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            pnlSizeChange.Size = new Size(250, 94);
+            pnlSizeChange.TabIndex = 1;
+            // 
+            // inGridSize
+            // 
+            inGridSize.Anchor = AnchorStyles.None;
+            inGridSize.Font = new Font("Segoe UI Semibold", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            inGridSize.Location = new Point(15, 45);
+            inGridSize.Margin = new Padding(0);
+            inGridSize.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
+            inGridSize.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
+            inGridSize.Name = "inGridSize";
+            inGridSize.Size = new Size(100, 43);
+            inGridSize.TabIndex = 0;
+            inGridSize.Value = new decimal(new int[] { 5, 0, 0, 0 });
+            inGridSize.KeyPress += inGridSize_KeyPress;
+            // 
+            // btnSubmitSize
+            // 
+            btnSubmitSize.Anchor = AnchorStyles.None;
+            btnSubmitSize.Location = new Point(127, 42);
+            btnSubmitSize.Margin = new Padding(0);
+            btnSubmitSize.Name = "btnSubmitSize";
+            btnSubmitSize.Size = new Size(116, 50);
+            btnSubmitSize.TabIndex = 1;
+            btnSubmitSize.Text = "Change";
+            btnSubmitSize.UseVisualStyleBackColor = true;
+            btnSubmitSize.Click += btnSubmitSize_Click;
+            // 
+            // lblChange
+            // 
+            lblChange.AutoSize = true;
+            pnlSizeChange.SetColumnSpan(lblChange, 2);
+            lblChange.Dock = DockStyle.Fill;
+            lblChange.Location = new Point(8, 0);
+            lblChange.Name = "lblChange";
+            lblChange.Size = new Size(234, 40);
+            lblChange.TabIndex = 2;
+            lblChange.Text = "Change Size";
+            lblChange.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // pnlGame
+            // 
+            pnlGame.Dock = DockStyle.Fill;
+            pnlGame.Location = new Point(0, 0);
+            pnlGame.Margin = new Padding(0);
+            pnlGame.Name = "pnlGame";
+            pnlGame.Size = new Size(500, 400);
+            pnlGame.TabIndex = 1;
+            // 
+            // GameControl
+            // 
+            AutoScaleDimensions = new SizeF(13F, 32F);
+            AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(pnlGame);
+            Controls.Add(pnlGameBtns);
+            Margin = new Padding(0);
+            Name = "GameControl";
+            Size = new Size(500, 500);
+            pnlGameBtns.ResumeLayout(false);
+            pnlSizeChange.ResumeLayout(false);
+            pnlSizeChange.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)inGridSize).EndInit();
+            ResumeLayout(false);
         }
 
-        // Horizontal en verticale hints tekenen
-        for (int i = 0; i < _game.RowHints.Length; i++)
-        {
-            for (int j = 0; j < _game.RowHints[i].Length; j++)
-            {
-                g.DrawString(_game.RowHints[i][j].ToString(), font, Brushes.Black, new Rectangle((_game.GridStart.X - (_game.CellSize * _game.RowHints[i].Length)) + (_game.CellSize * j), _game.GridStart.Y + (_game.CellSize * i), _game.CellSize, _game.CellSize));
-            }
-        }
-        for (int i = 0; i < _game.ColHints.Length; i++)
-        {
-            for (int j = 0; j < _game.ColHints[i].Length; j++)
-            {
-                g.DrawString(_game.ColHints[i][j].ToString(), font, Brushes.Black, new Rectangle(_game.GridStart.X + (_game.CellSize * i), (_game.GridStart.Y - (_game.CellSize * _game.ColHints[i].Length)) + (_game.CellSize * j), _game.CellSize, _game.CellSize));
-            }
-        }
-    }
+        #endregion
 
-    // Andere methoden blijven hetzelfde
-
-    public void ChangeGrid(int size)
-    {
-        _game = new Game(size);
-        pnlGame.Refresh();
-    }
-
-    private void inGridSize_KeyPress(object sender, KeyPressEventArgs e)
-    {
-        if (e.KeyChar == (char)Keys.Enter)
-            btnSubmitSize_Click(sender, e);
-    }
-
-    private void btnSubmitSize_Click(object sender, EventArgs e)
-    {
-        ChangeGrid((int)inGridSize.Value);
-        pnlGame.Refresh();
+        private TableLayoutPanel pnlGameBtns;
+        private Panel pnlGame;
+        private NumericUpDown inGridSize;
+        private TableLayoutPanel pnlSizeChange;
+        private Button btnSubmitSize;
+        private Label lblChange;
     }
 }
