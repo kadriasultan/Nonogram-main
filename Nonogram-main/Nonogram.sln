@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35825.156
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nonogram", "Nonogram\Nonogram.csproj", "{72A8631C-D7F0-427E-8A04-FD2712DD5E4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NonogramTest", "NonogramTest\NonogramTest.csproj", "{77297D38-2C75-4DCD-8A19-809DC6AA9B2A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{72A8631C-D7F0-427E-8A04-FD2712DD5E4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72A8631C-D7F0-427E-8A04-FD2712DD5E4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72A8631C-D7F0-427E-8A04-FD2712DD5E4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72A8631C-D7F0-427E-8A04-FD2712DD5E4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77297D38-2C75-4DCD-8A19-809DC6AA9B2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77297D38-2C75-4DCD-8A19-809DC6AA9B2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77297D38-2C75-4DCD-8A19-809DC6AA9B2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77297D38-2C75-4DCD-8A19-809DC6AA9B2A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F4F335CE-0EEF-487D-98BF-F36FC94C2D33}
+	EndGlobalSection
+EndGlobal
