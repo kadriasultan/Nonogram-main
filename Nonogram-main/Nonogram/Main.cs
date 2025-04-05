@@ -8,7 +8,6 @@ namespace Nonogram
 {
     public partial class Main : Form
     {
-        // Professional color palette
         private readonly Color PrimaryColor = Color.FromArgb(44, 62, 80);
         private readonly Color SecondaryColor = Color.FromArgb(52, 152, 219);
         private readonly Color LightBackground = Color.FromArgb(236, 240, 241);
@@ -156,14 +155,10 @@ namespace Nonogram
             var bodyPanel = controls.Find("pnlBody", false).FirstOrDefault();
             if (bodyPanel == null) return;
 
-            // BLOCK ACCESS TO GAME IF NOT LOGGED IN
+            // Geen tweede melding hier
             if (control == "game" && User == null)
             {
-                MessageBox.Show("Je moet ingelogd zijn om te kunnen spelen. Klik op LOGIN om in te loggen.",
-                              "Inloggen vereist",
-                              MessageBoxButtons.OK,
-                              MessageBoxIcon.Exclamation);
-                control = "menu";
+                return; // Niet wisselen naar game
             }
 
             bool showWelcome = (control == "menu");
@@ -224,14 +219,21 @@ namespace Nonogram
                 Visible = false
             };
 
-            // Find and configure the Play button
             var playButton = menu.Controls.Find("btnPlay", true).FirstOrDefault() as Button;
             if (playButton != null)
             {
-                playButton.Click += (s, e) => ChangeView("game", this.Controls);
+                playButton.Click += (s, e) =>
+                {
+                    if (User == null)
+                    {
+                        MessageBox.Show("Je moet ingelogd zijn om te kunnen spelen.", "Niet ingelogd", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    ChangeView("game", this.Controls);
+                };
             }
 
-            // Style all buttons
             foreach (Control ctrl in menu.Controls)
             {
                 if (ctrl is Button btn)
