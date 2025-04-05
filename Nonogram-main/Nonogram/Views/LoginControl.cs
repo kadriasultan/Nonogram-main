@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Nonogram.Models;
-using Nonogram.Database;
+using Nonogram.Services;
 
 namespace Nonogram.Views
 {
@@ -29,40 +23,57 @@ namespace Nonogram.Views
             string name = tbName.Text;
             string password = tbPassword.Text;
 
-            if (!HandleInput(name) || !HandleInput(password))
+            if (!ValidateInputs(name, password))
             {
-                MessageBox.Show("Error with inputs", "Error Message");
+                MessageBox.Show("Please enter both username and password", "Error",
+                             MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            JsonUserDatabase db = new JsonUserDatabase();
-            List<User> users = db.GetUsers("../../../Database/Users.json");
-            User user = users.Where(u => u.Name == name).FirstOrDefault();
-
-            if (user == null)
+            try
             {
-                MessageBox.Show(string.Format("Name: {0} does not match any user", name));
-                return;
-            }
+                // Gebruik UserService in plaats van JsonUserDatabase
+                var users = UserService.LoadUsers();
+                var user = users.FirstOrDefault(u => u.Name.Equals(name, StringComparison.Ordinal));
 
-            if (!User.VerifyPassword(password, user.Password))
-            {
-                MessageBox.Show("Password does not match user");
-                return;
+                if (user == null)
+                {
+                    MessageBox.Show($"User '{name}' not found", "Login Failed",
+                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (!User.VerifyPassword(password, user.Password))
+                {
+                    MessageBox.Show("Incorrect password", "Login Failed",
+                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Succesvol ingelogd
+                Main.User = user;
+                Main.ChangeNavUser(FindForm().Controls);
+                Main.ChangeView("menu", FindForm().Controls);
+
+                MessageBox.Show($"Welcome back, {user.Name}!", "Login Successful",
+                             MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            //User.VerifyPassword(password);
-            MessageBox.Show("Succefully logged in");
-            Main.User = user;
-            Main.ChangeNavUser(FindForm().Controls);
-            Main.ChangeView("menu", FindForm().Controls);
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Login error: {ex.Message}", "Error",
+                             MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        // Make Input handler class
-        private bool HandleInput(string text)
+        private bool ValidateInputs(string username, string password)
         {
-            if (string.IsNullOrEmpty(text))
-                return false;
-            return true;
+            return !string.IsNullOrWhiteSpace(username) &&
+                   !string.IsNullOrWhiteSpace(password);
+        }
+
+        private void pnlLayout_Paint(object sender, PaintEventArgs e)
+        {
+            
         }
     }
 }

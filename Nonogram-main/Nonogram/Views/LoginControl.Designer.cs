@@ -41,12 +41,12 @@
             // 
             tbName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tbName.Font = new Font("Segoe UI", 12F);
-            tbName.Location = new Point(50, 100);
+            tbName.Location = new Point(31, 62);
             tbName.Margin = new Padding(0);
             tbName.MaxLength = 50;
             tbName.Name = "tbName";
             tbName.PlaceholderText = "Name";
-            tbName.Size = new Size(400, 50);
+            tbName.Size = new Size(248, 34);
             tbName.TabIndex = 0;
             tbName.TextAlign = HorizontalAlignment.Center;
             // 
@@ -54,13 +54,13 @@
             // 
             tbPassword.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tbPassword.Font = new Font("Segoe UI", 12F);
-            tbPassword.Location = new Point(50, 175);
+            tbPassword.Location = new Point(31, 109);
             tbPassword.Margin = new Padding(0);
             tbPassword.MaxLength = 50;
             tbPassword.Name = "tbPassword";
             tbPassword.PasswordChar = '*';
             tbPassword.PlaceholderText = "Password";
-            tbPassword.Size = new Size(400, 50);
+            tbPassword.Size = new Size(248, 34);
             tbPassword.TabIndex = 1;
             tbPassword.TextAlign = HorizontalAlignment.Center;
             // 
@@ -68,10 +68,10 @@
             // 
             btnLogin.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             btnLogin.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            btnLogin.Location = new Point(50, 250);
+            btnLogin.Location = new Point(31, 156);
             btnLogin.Margin = new Padding(0);
             btnLogin.Name = "btnLogin";
-            btnLogin.Size = new Size(400, 50);
+            btnLogin.Size = new Size(246, 31);
             btnLogin.TabIndex = 2;
             btnLogin.Text = "Login";
             btnLogin.UseVisualStyleBackColor = true;
@@ -81,10 +81,10 @@
             // 
             btnRegister.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             btnRegister.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            btnRegister.Location = new Point(50, 325);
+            btnRegister.Location = new Point(31, 203);
             btnRegister.Margin = new Padding(0);
             btnRegister.Name = "btnRegister";
-            btnRegister.Size = new Size(400, 50);
+            btnRegister.Size = new Size(246, 31);
             btnRegister.TabIndex = 3;
             btnRegister.Text = "Register";
             btnRegister.UseVisualStyleBackColor = true;
@@ -101,28 +101,29 @@
             pnlLayout.Location = new Point(0, 0);
             pnlLayout.Margin = new Padding(0);
             pnlLayout.Name = "pnlLayout";
-            pnlLayout.Size = new Size(500, 500);
+            pnlLayout.Size = new Size(308, 312);
             pnlLayout.TabIndex = 4;
+            pnlLayout.Paint += pnlLayout_Paint;
             // 
             // lblLogin
             // 
             lblLogin.AutoSize = true;
             lblLogin.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            lblLogin.Location = new Point(164, 5);
+            lblLogin.Location = new Point(101, 3);
             lblLogin.Margin = new Padding(0);
             lblLogin.Name = "lblLogin";
-            lblLogin.Size = new Size(172, 72);
+            lblLogin.Size = new Size(110, 46);
             lblLogin.TabIndex = 4;
             lblLogin.Text = "Login";
             // 
             // LoginControl
             // 
-            AutoScaleDimensions = new SizeF(13F, 32F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(pnlLayout);
             Margin = new Padding(0);
             Name = "LoginControl";
-            Size = new Size(500, 500);
+            Size = new Size(308, 312);
             pnlLayout.ResumeLayout(false);
             pnlLayout.PerformLayout();
             ResumeLayout(false);

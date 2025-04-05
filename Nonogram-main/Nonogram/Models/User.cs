@@ -13,8 +13,12 @@ namespace Nonogram.Models
         const int iterations = 350000;
         static readonly HashAlgorithmName hashAlgorithm = HashAlgorithmName.SHA512;
 
-        public string Name { get; private set; }
-        public DPassword Password { get; private set; }
+        // Properties moeten public setters hebben voor JSON deserialisatie
+        public string Name { get; set; }
+        public DPassword Password { get; set; }
+
+        // Parameterloze constructor nodig voor JSON deserialisatie
+        public User() { }
 
         public User(string name, DPassword password)
         {
@@ -28,7 +32,7 @@ namespace Nonogram.Models
             if (password1 != password2)
                 throw new ArgumentException("Passwords do not match!");
 
-            byte[] salt = RandomNumberGenerator.GetBytes(keySize); 
+            byte[] salt = RandomNumberGenerator.GetBytes(keySize);
 
             byte[] hash = Rfc2898DeriveBytes.Pbkdf2(
                 Encoding.UTF8.GetBytes(password1),
@@ -45,7 +49,6 @@ namespace Nonogram.Models
         {
             byte[] hashToCompare = Rfc2898DeriveBytes.Pbkdf2(
                 password,
-                //dPassword.Salt,
                 Convert.FromBase64String(dPassword.Salt),
                 iterations,
                 hashAlgorithm,
@@ -56,14 +59,18 @@ namespace Nonogram.Models
         }
     }
 
-    //class DPassword(string hash, string salt)
-    //{
-    //    public string Hash { get; private set; } = hash;
-    //    public string Salt { get; private set; } = salt;
-    //}
-    public class DPassword(string hash, string salt)
+    public class DPassword
     {
-        public string Hash { get; private set; } = hash;
-        public string Salt { get; private set; } = salt;
+        public string Hash { get; set; }
+        public string Salt { get; set; }
+
+        // Parameterloze constructor nodig voor JSON deserialisatie
+        public DPassword() { }
+
+        public DPassword(string hash, string salt)
+        {
+            Hash = hash;
+            Salt = salt;
+        }
     }
 }

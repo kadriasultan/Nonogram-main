@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Nonogram.Models;
-using Nonogram.Database;
+using Nonogram.Services;
 
 namespace Nonogram.Views
 {
@@ -26,41 +20,68 @@ namespace Nonogram.Views
 
         private void btnRegister_Click(object sender, EventArgs e)
         {
-            string name = tbName.Text;
+            string name = tbName.Text.Trim();
             string password1 = tbPassword1.Text;
             string password2 = tbPassword2.Text;
 
-            if (!HandleInput(name) || !HandleInput(password1) || !HandleInput(password2))
+            if (!ValidateInputs(name, password1, password2))
             {
-                MessageBox.Show("Error with inputs", "Error Message");
+                MessageBox.Show("Please fill in all fields", "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            JsonUserDatabase db = new JsonUserDatabase();
-            List<User> users = db.GetUsers("../../../Database/Users.json");
-
-            User dbUser = users.Where(u => u.Name == name).FirstOrDefault();
-
-            if (dbUser != null)
+            try
             {
-                MessageBox.Show(string.Format("User: {0} already exists", name));
-                return;
+                // Load existing users
+                var users = UserService.LoadUsers();
+
+                // Check if username already exists
+                if (users.Any(u => u.Name.Equals(name, StringComparison.Ordinal)))
+                {
+                    MessageBox.Show($"Username '{name}' is already taken", "Registration Failed",
+                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Verify password match
+                if (password1 != password2)
+                {
+                    MessageBox.Show("Passwords do not match", "Error",
+                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Create and save new user
+                var hashedPassword = User.HashPassword(password1, password2);
+                var newUser = new User(name, hashedPassword);
+
+                users.Add(newUser);
+                UserService.SaveUsers(users);
+
+                MessageBox.Show("Account created successfully!\nYou can now log in.", "Success",
+                             MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Return to login screen
+                Main.ChangeView("login", FindForm().Controls);
             }
-
-            User user = new User(name, User.HashPassword(password1, password2));
-            db.Save(user, "../../../Database/Users.json");
-            MessageBox.Show("Succefully created a account");
-
-            // Change to game/menu screen
-            Main.ChangeView("login", FindForm().Controls);
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Registration failed: {ex.Message}", "Error",
+                             MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        // Make Input handler class
-        private bool HandleInput(string text)
+        private bool ValidateInputs(string username, string password1, string password2)
         {
-            if (string.IsNullOrEmpty(text))
-                return false;
-            return true;
+            return !string.IsNullOrWhiteSpace(username) &&
+                   !string.IsNullOrWhiteSpace(password1) &&
+                   !string.IsNullOrWhiteSpace(password2);
+        }
+
+        private void lblRegister_Click(object sender, EventArgs e)
+        {
+            // Event handler for label click (if needed)
         }
     }
 }
