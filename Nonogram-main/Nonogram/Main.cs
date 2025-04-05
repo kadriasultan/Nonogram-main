@@ -53,15 +53,20 @@ namespace Nonogram
                     btn.FlatStyle = FlatStyle.Flat;
                     btn.FlatAppearance.BorderSize = 0;
                     btn.ForeColor = Color.White;
-                    btn.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+                    btn.Font = new Font("Segoe UI", 8, FontStyle.Bold);
                     btn.Padding = new Padding(8, 3, 8, 3);
                     btn.Cursor = Cursors.Hand;
                     btn.Margin = new Padding(2);
-                    btn.Height = 30;
+                    btn.Height = 40;
 
                     if (btn.Name == "btnMenu")
                     {
                         btn.Text = "HOME";
+                    }
+                    else if (btn.Name == "btnUser")
+                    {
+                        btn.Text = (User == null) ? "LOGIN" : "LOGOUT";
+                        btn.Tag = (User == null) ? "login" : "logout";
                     }
                 }
                 else if (ctrl is Label lbl)
@@ -70,6 +75,7 @@ namespace Nonogram
                     lbl.Font = new Font("Segoe UI", 9, FontStyle.Bold);
                 }
             }
+
 
             pnlBody.BackColor = LightBackground;
             pnlBody.Padding = new Padding(10,80,10,10);
