@@ -17,6 +17,10 @@ namespace Nonogram
         public static User? User = null;
         private Label lblWelcome;
         private PictureBox logoPictureBox;
+        private MenuControl menu;
+        private LoginControl login;
+        private RegisterControl register;
+        private GameControl game;
 
         public Main()
         {
@@ -31,7 +35,6 @@ namespace Nonogram
 
         private void ApplyProfessionalStyling()
         {
-            // Main form styling
             this.BackColor = LightBackground;
             this.Font = new Font("Segoe UI", 9);
             this.Text = "Nonogram Puzzle";
@@ -39,12 +42,10 @@ namespace Nonogram
             this.MinimumSize = new Size(400, 400);
             this.Resize += Main_Resize;
 
-            // Navigation panel
             pnlNav.BackColor = PrimaryColor;
             pnlNav.Padding = new Padding(3);
             pnlNav.Height = 40;
 
-            // Style navigation buttons
             foreach (Control ctrl in pnlNav.Controls)
             {
                 if (ctrl is Button btn)
@@ -59,7 +60,6 @@ namespace Nonogram
                     btn.Margin = new Padding(2);
                     btn.Height = 30;
 
-                    // Change "Menu" button to "Home"
                     if (btn.Name == "btnMenu")
                     {
                         btn.Text = "HOME";
@@ -72,14 +72,12 @@ namespace Nonogram
                 }
             }
 
-            // Body panel
             pnlBody.BackColor = LightBackground;
             pnlBody.Padding = new Padding(10);
         }
 
         private void InitializeWelcomeSection()
         {
-            // Welcome label
             lblWelcome = new Label
             {
                 Text = "WELKOM BIJ NONOGRAM",
@@ -93,7 +91,6 @@ namespace Nonogram
                 Margin = new Padding(0, 0, 0, 10)
             };
 
-            // Logo/image
             logoPictureBox = new PictureBox
             {
                 SizeMode = PictureBoxSizeMode.Zoom,
@@ -119,7 +116,6 @@ namespace Nonogram
                 MessageBox.Show($"Error loading image: {ex.Message}");
             }
 
-            // Add controls to panel
             pnlBody.Controls.Add(logoPictureBox);
             pnlBody.Controls.Add(lblWelcome);
         }
@@ -160,6 +156,16 @@ namespace Nonogram
             var bodyPanel = controls.Find("pnlBody", false).FirstOrDefault();
             if (bodyPanel == null) return;
 
+            // BLOCK ACCESS TO GAME IF NOT LOGGED IN
+            if (control == "game" && User == null)
+            {
+                MessageBox.Show("Je moet ingelogd zijn om te kunnen spelen. Klik op LOGIN om in te loggen.",
+                              "Inloggen vereist",
+                              MessageBoxButtons.OK,
+                              MessageBoxIcon.Exclamation);
+                control = "menu";
+            }
+
             bool showWelcome = (control == "menu");
             var welcomeLabel = bodyPanel.Controls.Find("lblWelcome", false).FirstOrDefault();
             var logo = bodyPanel.Controls.Find("logoPictureBox", false).FirstOrDefault();
@@ -196,7 +202,6 @@ namespace Nonogram
             }
         }
 
-        #region Views Initialization
         private void InitializeView()
         {
             InitializeMenuControl();
@@ -212,11 +217,21 @@ namespace Nonogram
 
         private void InitializeMenuControl()
         {
-            menu = new MenuControl();
-            menu.Dock = DockStyle.Fill;
-            menu.Name = "menu";
-            menu.Visible = false;
+            menu = new MenuControl
+            {
+                Dock = DockStyle.Fill,
+                Name = "menu",
+                Visible = false
+            };
 
+            // Find and configure the Play button
+            var playButton = menu.Controls.Find("btnPlay", true).FirstOrDefault() as Button;
+            if (playButton != null)
+            {
+                playButton.Click += (s, e) => ChangeView("game", this.Controls);
+            }
+
+            // Style all buttons
             foreach (Control ctrl in menu.Controls)
             {
                 if (ctrl is Button btn)
@@ -237,35 +252,34 @@ namespace Nonogram
 
         private void InitializeLoginControl()
         {
-            login = new LoginControl();
-            login.Dock = DockStyle.Fill;
-            login.Name = "login";
-            login.Visible = false;
+            login = new LoginControl
+            {
+                Dock = DockStyle.Fill,
+                Name = "login",
+                Visible = false
+            };
         }
 
         private void InitializeRegisterControl()
         {
-            register = new RegisterControl();
-            register.Dock = DockStyle.Fill;
-            register.Name = "register";
-            register.Visible = false;
+            register = new RegisterControl
+            {
+                Dock = DockStyle.Fill,
+                Name = "register",
+                Visible = false
+            };
         }
 
         private void InitializeGameControl()
         {
-            game = new GameControl();
-            game.Dock = DockStyle.Fill;
-            game.Name = "game";
-            game.Visible = false;
+            game = new GameControl
+            {
+                Dock = DockStyle.Fill,
+                Name = "game",
+                Visible = false
+            };
         }
 
-        private MenuControl menu;
-        private LoginControl login;
-        private RegisterControl register;
-        private GameControl game;
-        #endregion
-
-        #region Event Handlers
         private void NavButton_Menu(object sender, EventArgs e)
         {
             ChangeView("menu", Controls);
@@ -290,13 +304,13 @@ namespace Nonogram
 
         private void Main_Resize(object sender, EventArgs e)
         {
-            var logo = pnlBody.Controls.Find("logoPictureBox", false).FirstOrDefault();
+            var logo = pnlBody.Controls.OfType<PictureBox>().FirstOrDefault(p => p.Name == "logoPictureBox");
             if (logo != null)
             {
                 logo.Height = CalculateLogoHeight();
             }
 
-            var menuControl = pnlBody.Controls.Find("menu", false).FirstOrDefault() as MenuControl;
+            var menuControl = pnlBody.Controls.OfType<MenuControl>().FirstOrDefault();
             if (menuControl != null && menuControl.Visible)
             {
                 foreach (Control ctrl in menuControl.Controls)
@@ -309,6 +323,10 @@ namespace Nonogram
                 }
             }
         }
-        #endregion
+
+        private void pnlBody_Paint(object sender, PaintEventArgs e)
+        {
+            // Optional panel styling
+        }
     }
 }
