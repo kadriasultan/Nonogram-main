@@ -72,7 +72,7 @@ namespace Nonogram
             }
 
             pnlBody.BackColor = LightBackground;
-            pnlBody.Padding = new Padding(10);
+            pnlBody.Padding = new Padding(10,80,10,10);
         }
 
         private void InitializeWelcomeSection()
@@ -87,7 +87,7 @@ namespace Nonogram
                 TextAlign = ContentAlignment.MiddleCenter,
                 Name = "lblWelcome",
                 BackColor = Color.Transparent,
-                Margin = new Padding(0, 0, 0, 10)
+                Margin = new Padding(0, 20, 0, 10)
             };
 
             logoPictureBox = new PictureBox
