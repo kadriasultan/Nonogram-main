@@ -10,6 +10,7 @@ namespace Nonogram.Views
         private Game _game;
         private Font font;
         private readonly FontFamily fontFamily = new("Arial");
+        private bool _showCompletionMessage = true;
 
         public event Action? GameCompleted;
 
@@ -26,11 +27,13 @@ namespace Nonogram.Views
         public void ChangeGrid(int size)
         {
             _game = new Game(size);
+            _showCompletionMessage = true; // Reset completion message flag
+            pnlGame.Invalidate();
         }
 
         private void PnlGame_MouseClick(object? sender, MouseEventArgs e)
         {
-            if (_game == null) return;
+            if (_game == null || _game.Complete) return;
 
             if (!IsInsideGrid(e.Location)) return;
 
@@ -62,21 +65,60 @@ namespace Nonogram.Views
         {
             if (_game == null) return;
 
+            bool wasComplete = _game.Complete;
             _game.ValidateGame();
-            if (_game.Complete) GameCompleted?.Invoke();
+
+            if (_game.Complete && !wasComplete && _showCompletionMessage)
+            {
+                _showCompletionMessage = false;
+                ShowCompletionMessage();
+                GameCompleted?.Invoke();
+            }
 
             Graphics g = e.Graphics;
-
             SetupGridSizeAndFont();
             DrawGridBackground(g);
             DrawGridLines(g);
             DrawMarkedCells(g);
             DrawHints(g);
+
+            if (_game.Complete)
+            {
+                DrawCompletionOverlay(g);
+            }
+        }
+
+        private void ShowCompletionMessage()
+        {
+            MessageBox.Show("Gefeliciteerd! Je hebt de puzzel opgelost!",
+                          "Puzzel voltooid",
+                          MessageBoxButtons.OK,
+                          MessageBoxIcon.Information);
+        }
+
+        private void DrawCompletionOverlay(Graphics g)
+        {
+            var rect = new Rectangle(_game.GridStart.X, _game.GridStart.Y,
+                                   _game.GridArea, _game.GridArea);
+
+            using (var brush = new SolidBrush(Color.FromArgb(128, Color.LightGreen)))
+            {
+                g.FillRectangle(brush, rect);
+            }
+
+            var font = new Font("Arial", 24, FontStyle.Bold);
+            var text = "Voltooid!";
+            var size = g.MeasureString(text, font);
+
+            g.DrawString(text, font, Brushes.DarkGreen,
+                        rect.X + (rect.Width - size.Width) / 2,
+                        rect.Y + (rect.Height - size.Height) / 2);
         }
 
         private void SetupGridSizeAndFont()
         {
-            _game.CellSize = Math.Min(pnlGame.ClientSize.Width, pnlGame.ClientSize.Height) / (_game.GridSize + Math.Max(_game.RowHintMax, _game.ColHintMax));
+            _game.CellSize = Math.Min(pnlGame.ClientSize.Width, pnlGame.ClientSize.Height) /
+                           (_game.GridSize + Math.Max(_game.RowHintMax, _game.ColHintMax));
             _game.GridStart = new Point(_game.CellSize * _game.RowHintMax, _game.CellSize * _game.ColHintMax);
             _game.GridArea = _game.CellSize * _game.GridSize;
             font = new Font(fontFamily, _game.CellSize, FontStyle.Regular, GraphicsUnit.Pixel);
@@ -91,7 +133,7 @@ namespace Nonogram.Views
 
         private void DrawGridLines(Graphics g)
         {
-            for (int i = 0; i < _game.GridSize; i++)
+            for (int i = 0; i <= _game.GridSize; i++)
             {
                 g.DrawLine(Pens.Black,
                     _game.GridStart.X,
@@ -115,8 +157,8 @@ namespace Nonogram.Views
                 {
                     Point pos = GetCellPosition(row, col);
                     Rectangle rect = new(pos.X + _game.CellPadding.Left, pos.Y + _game.CellPadding.Top,
-                                         _game.CellSize - _game.CellPadding.Left - _game.CellPadding.Right,
-                                         _game.CellSize - _game.CellPadding.Top - _game.CellPadding.Bottom);
+                                      _game.CellSize - _game.CellPadding.Left - _game.CellPadding.Right,
+                                      _game.CellSize - _game.CellPadding.Top - _game.CellPadding.Bottom);
 
                     switch (_game.Marked[row, col])
                     {
@@ -164,7 +206,6 @@ namespace Nonogram.Views
             );
         }
 
-        // Extra UI logica (indien gebruikt in je WinForms Designer)
         private void inGridSize_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Enter)
@@ -174,7 +215,6 @@ namespace Nonogram.Views
         private void btnSubmitSize_Click(object sender, EventArgs e)
         {
             ChangeGrid((int)inGridSize.Value);
-            pnlGame.Refresh();
         }
     }
 }
