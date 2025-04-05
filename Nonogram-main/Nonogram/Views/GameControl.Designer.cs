@@ -123,7 +123,7 @@ namespace Nonogram.Views
             pnlGame.Name = "pnlGame";
             pnlGame.Size = new Size(308, 250);
             pnlGame.TabIndex = 1;
-            pnlGame.Paint += pnlGame_Paint_1;
+            
             // 
             // GameControl
             // 
@@ -139,6 +139,11 @@ namespace Nonogram.Views
             pnlSizeChange.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)inGridSize).EndInit();
             ResumeLayout(false);
+        }
+
+        private void PnlGame_Paint_1(object sender, PaintEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void lblChange_Click(object sender, EventArgs e)
