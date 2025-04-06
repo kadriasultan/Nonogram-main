@@ -78,7 +78,7 @@ namespace Nonogram
 
 
             pnlBody.BackColor = LightBackground;
-            pnlBody.Padding = new Padding(10,80,10,10);
+            pnlBody.Padding = new Padding(10, 80, 10, 10);
         }
 
         private void InitializeWelcomeSection()
@@ -161,10 +161,10 @@ namespace Nonogram
             var bodyPanel = controls.Find("pnlBody", false).FirstOrDefault();
             if (bodyPanel == null) return;
 
-            
+
             if (control == "game" && User == null)
             {
-                return; 
+                return;
             }
 
             bool showWelcome = (control == "menu");
@@ -334,7 +334,12 @@ namespace Nonogram
 
         private void pnlBody_Paint(object sender, PaintEventArgs e)
         {
-            
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
