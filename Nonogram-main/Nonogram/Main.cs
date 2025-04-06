@@ -39,7 +39,7 @@ namespace Nonogram
             this.Text = "Nonogram Puzzle";
             this.StartPosition = FormStartPosition.CenterScreen;
             this.MinimumSize = new Size(400, 400);
-            this.Resize += Main_Resize;
+            Resize += Main_Resize;
 
             pnlNav.BackColor = PrimaryColor;
             pnlNav.Padding = new Padding(3);
@@ -161,10 +161,10 @@ namespace Nonogram
             var bodyPanel = controls.Find("pnlBody", false).FirstOrDefault();
             if (bodyPanel == null) return;
 
-            // Geen tweede melding hier
+            
             if (control == "game" && User == null)
             {
-                return; // Niet wisselen naar game
+                return; 
             }
 
             bool showWelcome = (control == "menu");
@@ -310,7 +310,7 @@ namespace Nonogram
             }
         }
 
-        private void Main_Resize(object sender, EventArgs e)
+        private void Main_Resize(object? sender, EventArgs e)
         {
             var logo = pnlBody.Controls.OfType<PictureBox>().FirstOrDefault(p => p.Name == "logoPictureBox");
             if (logo != null)
@@ -334,7 +334,7 @@ namespace Nonogram
 
         private void pnlBody_Paint(object sender, PaintEventArgs e)
         {
-            // Optional panel styling
+            
         }
     }
 }

@@ -84,7 +84,7 @@ namespace Nonogram.Views
             inGridSize.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
             inGridSize.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
             inGridSize.Name = "inGridSize";
-            inGridSize.Size = new Size(62, 30);
+            inGridSize.Size = new Size(59, 40);
             inGridSize.TabIndex = 0;
             inGridSize.Value = new decimal(new int[] { 5, 0, 0, 0 });
             inGridSize.KeyPress += inGridSize_KeyPress;
@@ -139,6 +139,11 @@ namespace Nonogram.Views
             pnlSizeChange.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)inGridSize).EndInit();
             ResumeLayout(false);
+        }
+
+        private void inGridSize_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void PnlGame_Paint_1(object sender, PaintEventArgs e)

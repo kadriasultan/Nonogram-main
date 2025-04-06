@@ -81,7 +81,12 @@ namespace Nonogram.Views
 
         private void lblRegister_Click(object sender, EventArgs e)
         {
-            // Event handler for label click (if needed)
+
+        }
+
+        private void pnlLayout_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

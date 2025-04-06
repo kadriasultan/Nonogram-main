@@ -22,6 +22,12 @@ namespace Nonogram.Views
             pnlGame.Paint += PnlGame_Paint;
             pnlGame.MouseClick += PnlGame_MouseClick;
             pnlGame.Resize += (s, e) => pnlGame.Invalidate();
+
+            // Voeg event handler toe voor inGridSize (let op de hoofdletter)
+            if (inGridSize != null)
+            {
+                inGridSize.KeyPress += InGridSize_KeyPress;
+            }
         }
 
         public void ChangeGrid(int size)
@@ -206,15 +212,20 @@ namespace Nonogram.Views
             );
         }
 
-        private void inGridSize_KeyPress(object sender, KeyPressEventArgs e)
+        private void InGridSize_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Enter)
+            {
                 btnSubmitSize_Click(sender, e);
+            }
         }
 
         private void btnSubmitSize_Click(object sender, EventArgs e)
         {
-            ChangeGrid((int)inGridSize.Value);
+            if (inGridSize != null)
+            {
+                ChangeGrid((int)inGridSize.Value);
+            }
         }
     }
 }
