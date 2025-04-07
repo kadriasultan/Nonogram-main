@@ -30,42 +30,47 @@
         {
             btnUser = new Button();
             btnMenu = new Button();
+            pnlBody = new Panel();
             pnlNav = new TableLayoutPanel();
-            pictureBox1 = new PictureBox();
-            Play = new Button();
-            button1 = new Button();
             pnlNav.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // btnUser
             // 
             btnUser.Anchor = AnchorStyles.None;
-            btnUser.BackColor = SystemColors.MenuHighlight;
             btnUser.Font = new Font("Segoe UI", 10.875F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnUser.Location = new Point(426, 15);
+            btnUser.Location = new Point(368, 15);
             btnUser.Margin = new Padding(0);
             btnUser.Name = "btnUser";
             btnUser.Size = new Size(92, 31);
             btnUser.TabIndex = 1;
             btnUser.Tag = "login";
-            btnUser.Text = "Login";
-            btnUser.UseVisualStyleBackColor = false;
+            btnUser.Text = "User";
+            btnUser.UseVisualStyleBackColor = true;
             btnUser.Click += NavButton_User;
             // 
             // btnMenu
             // 
             btnMenu.Anchor = AnchorStyles.None;
-            btnMenu.BackColor = SystemColors.MenuHighlight;
             btnMenu.Font = new Font("Segoe UI", 10.875F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnMenu.Location = new Point(15, 15);
             btnMenu.Margin = new Padding(0);
             btnMenu.Name = "btnMenu";
             btnMenu.Size = new Size(92, 31);
             btnMenu.TabIndex = 0;
-            btnMenu.Text = "Home";
-            btnMenu.UseVisualStyleBackColor = false;
+            btnMenu.Text = "Menu";
+            btnMenu.UseVisualStyleBackColor = true;
             btnMenu.Click += NavButton_Menu;
+            // 
+            // pnlBody
+            // 
+            pnlBody.Dock = DockStyle.Fill;
+            pnlBody.Location = new Point(0, 62);
+            pnlBody.Margin = new Padding(0);
+            pnlBody.Name = "pnlBody";
+            pnlBody.Size = new Size(476, 394);
+            pnlBody.TabIndex = 1;
+            pnlBody.Paint += pnlBody_Paint;
             // 
             // pnlNav
             // 
@@ -81,66 +86,27 @@
             pnlNav.Name = "pnlNav";
             pnlNav.RowCount = 1;
             pnlNav.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            pnlNav.Size = new Size(534, 62);
+            pnlNav.Size = new Size(476, 62);
             pnlNav.TabIndex = 2;
-            // 
-            // pictureBox1
-            // 
-            pictureBox1.Anchor = AnchorStyles.Top;
-            pictureBox1.Image = Properties.Resources.nonogram_puzzles_featured_image;
-            pictureBox1.Location = new Point(76, 112);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(363, 172);
-            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox1.TabIndex = 3;
-            pictureBox1.TabStop = false;
-            pictureBox1.Click += pictureBox1_Click;
-            // 
-            // Play
-            // 
-            Play.Anchor = AnchorStyles.Top;
-            Play.BackColor = SystemColors.MenuHighlight;
-            Play.Location = new Point(215, 310);
-            Play.Name = "Play";
-            Play.Size = new Size(94, 29);
-            Play.TabIndex = 4;
-            Play.Text = "Play";
-            Play.UseVisualStyleBackColor = false;
-            // 
-            // button1
-            // 
-            button1.Anchor = AnchorStyles.Top;
-            button1.BackColor = SystemColors.MenuHighlight;
-            button1.Location = new Point(215, 369);
-            button1.Name = "button1";
-            button1.Size = new Size(94, 29);
-            button1.TabIndex = 5;
-            button1.Text = "Login";
-            button1.UseVisualStyleBackColor = false;
             // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(534, 456);
-            Controls.Add(button1);
-            Controls.Add(Play);
-            Controls.Add(pictureBox1);
+            ClientSize = new Size(476, 456);
+            Controls.Add(pnlBody);
             Controls.Add(pnlNav);
             Margin = new Padding(2);
             Name = "Main";
             Text = "Nonogram Game";
             pnlNav.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
+        private Panel pnlBody;
         private Button btnUser;
         private Button btnMenu;
         private TableLayoutPanel pnlNav;
-        private PictureBox pictureBox1;
-        private Button Play;
-        private Button button1;
     }
 }
